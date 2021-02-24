@@ -12,6 +12,8 @@ const kafka = new Kafka({
     brokers: kafkaBrokers.split(',')
 })
 const topics = kafkaTopics.split(',');
+const producer = kafka.producer()
+var connected=false;
 
 getRandomTopic=function (){
     var idx = Math.floor(Math.random() * Math.floor(topics.length))
@@ -21,16 +23,17 @@ getRandomTopic=function (){
 
 //Actual job
 app.post('/', async (req, res) => {
-    const producer = kafka.producer()
     try{
-        await producer.connect()
+        if (!connected){
+            await producer.connect()
+            console.log("First connect to Kafka!")
+        }
         await producer.send({
         topic: getRandomTopic(),
         messages: [
             { value: JSON.stringify(req.body)} 
         ]
         })
-        await producer.disconnect()
     }
     catch(e)
     {
