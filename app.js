@@ -26,6 +26,7 @@ app.post('/', async (req, res) => {
     try{
         if (!connected){
             await producer.connect()
+            connected=true;
             console.log("First connect to Kafka!")
         }
         await producer.send({
@@ -38,6 +39,8 @@ app.post('/', async (req, res) => {
     catch(e)
     {
         console.log(e);
+        res.send(e);
+        return;
     }
     res.send('OK')
 })
