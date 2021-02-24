@@ -14,6 +14,8 @@ const kafka = new Kafka({
 const topics = kafkaTopics.split(',');
 const producer = kafka.producer()
 var connected=false;
+console.log(kafkaBrokers);
+console.log(kafkaTopics);
 
 getRandomTopic=function (){
     var idx = Math.floor(Math.random() * Math.floor(topics.length))
